@@ -98,7 +98,9 @@ def lignecolonne(case):
     if (case < 10):
         rslt = (0, case)
     else:
-        rslt = (int(str(case)[0]), int(case % 10))
+        i = int(str(case)[0])
+        j = int(case % 10)
+        rslt = (i, j)
 
     return rslt
 
