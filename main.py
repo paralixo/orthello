@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from utils import *
-from ui import *
+from ui import App, Tk
 
-show_ui = False
+# show_ui = False
+show_ui = True
 
 if show_ui is True : 
     fenetre = Tk()
@@ -13,7 +14,6 @@ if show_ui is True :
 
 
 damier = creer_damier()
-
 joueur = 1
 fin = False
 
