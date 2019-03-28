@@ -9,3 +9,8 @@
 - utils.py
 - ui.py
 - assets/orthello_animation.gif
+
+## Comment lancer mon jeu ?
+
+Executer le fichier main.py avec un compilateur python.
+> A l'aide de votre IDE ou en allant dans votre répertoire avec votre invite de commandes et taper `py ./main.py`
