@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+
 import re
 
 # Création du damier par rapport à la longueur/largeur souhaité
 # longueur et largeur -> int
-def creer_damier(hauteur = 10, longueur = 10):
+def creer_damier(hauteur = 6, longueur = 6):
     if (longueur%2 != 0 or hauteur%2 != 0):
         print("Erreur damier init")
         return 1
@@ -65,20 +67,20 @@ def affiche(damier):
 def affiche2(damier, joueur):
     longueur = len(damier[0])
     hauteur = len(damier)
+    case = 0
 
-    cpt = -1
     for i in range (hauteur):
         affiche_num_ligne(i)
         for j in range (longueur):
+            case = str(i) + str(j)
             print('|', end = '')
-            cpt += 1
 
             value = ' '
             if (damier[i][j] == 1):
                 value = 'X'
             elif (damier[i][j] == 2):
                 value = 'O'
-            elif (estValide(damier, joueur, cpt) is True):
+            elif (estValide(damier, joueur, case) is True):
                 value = '.'
             print(value, end = '')
 
@@ -90,18 +92,15 @@ def affiche2(damier, joueur):
 # Retourne la ligne et la colonne pour un numéro de case donnée
 # damier -> liste de liste d'entiers
 # case -> entier
-def lignecolonne(damier, case):
+def lignecolonne(case):
     rslt = (0, 0)
-    longueur = len(damier[0])
-    hauteur = len(damier)
 
-    cpt = -1
-    for i in range (hauteur):
-        for j in range (longueur):
-            cpt += 1
-            if (cpt == case):
-                rslt = (i, j)
-                return rslt
+    if (case < 10):
+        rslt = (0, case)
+    else:
+        rslt = (int(str(case)[0]), int(case % 10))
+
+    return rslt
 
 # teste la direction (delta_i, delta_j) ((int, int) -> compris entre -1 et 1 (0,0) non possible)) par rapport à la case choisi et le joueur 
 # retourne True si la case est jouable au sense orthello du terme (partie de estValide())
@@ -109,7 +108,7 @@ def testdirection(damier, joueur, case, delta_i, delta_j):
     estValide = False
     longueur = len(damier[0])
     hauteur = len(damier)
-    i, j = lignecolonne(damier, case)
+    i, j = lignecolonne(case)
     ennemi = 2 if joueur == 1 else 1
     ennemiPresent = False
 
@@ -135,9 +134,8 @@ def estValide(damier, joueur, case):
             return False
         case = int(case)
 
-    longueur = len(damier[0])
-    hauteur = len(damier)
-    if (case > (hauteur * longueur) - 1 or case < 0):
+    # if (case > (hauteur * longueur) - 1 or case < 0):
+    if (case < 0):
         return False
 
     estValide = False
@@ -162,7 +160,7 @@ def consequences(damier, joueur, case):
 
     ennemi = 2 if joueur == 1 else 1
     for dir in directions:
-        i, j = lignecolonne(damier, case)
+        i, j = lignecolonne(case)
         fin = False
         while (fin is False):
             i, j = i + dir[0], j + dir[1]
@@ -177,7 +175,7 @@ def consequences(damier, joueur, case):
 # case -> entrée utilisateur (censé être un entier)
 def joue(damier, joueur, case):
     if (estValide(damier, joueur, case) is True):
-        i, j = lignecolonne(damier, int(case))
+        i, j = lignecolonne(int(case))
         damier[i][j] = joueur
         consequences(damier, joueur, case)
         return True
