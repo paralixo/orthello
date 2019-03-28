@@ -10,6 +10,18 @@
 - ui.py
 - assets/orthello_animation.gif
 
+Juste pour Noé, structure du dossier :
+```
+project
+│
+└───assets
+│   │   orthello_animation.gif
+|
+│   main.py
+│   utils.py
+|   ui.py
+```
+
 ## Comment lancer mon jeu ?
 
 Executer le fichier main.py avec un compilateur python.
