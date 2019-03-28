@@ -45,6 +45,7 @@ def affiche(damier):
     longueur = len(damier[0])
     hauteur = len(damier)
 
+    print()
     for i in range (hauteur):
         affiche_num_ligne(i)
         for j in range (longueur):
@@ -69,6 +70,7 @@ def affiche2(damier, joueur):
     hauteur = len(damier)
     case = 0
 
+    print()
     for i in range (hauteur):
         affiche_num_ligne(i)
         for j in range (longueur):
