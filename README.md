@@ -1,5 +1,7 @@
 # Projet Orthello
 
+**Noé regarde ici avant de tester !** 
+
 ## Nécessaire au lancement du projet 
 
 - Python[3.X.X]
