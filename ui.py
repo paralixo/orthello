@@ -33,7 +33,7 @@ class App:
         self.frame = Frame(self.fenetre, borderwidth = 2, relief = GROOVE)
         Label(self.frame, text = "Frame bison").pack(padx=10, pady=10)
         self.frame.pack(side=RIGHT)
-        
+
         self.canvas = Canvas(fenetre, width = 360, height = 360, background = '#CD853F')
         self.canvas.bind("<Button-1>", self.clic)
         self.canvas.pack(side=LEFT)
@@ -59,27 +59,30 @@ class App:
             self.canvas.delete("all")
             self.affiche()
 
-    def affiche(self):
-        if (self.show_debug is True) : affiche2(self.damier, self.joueur)
-
-        padding = self.padding
-        c_img = self.cote_image
-
-        # draw damier
+    def affiche_plateau(self, padding, c_img):
         for i in range(self.hauteur + 1):
-            self.canvas.create_line(padding, i * c_img + padding, self.longueur * c_img + padding,  i * c_img + padding)
+            self.canvas.create_line(padding, i * c_img + padding, self.longueur * c_img + padding, i * c_img + padding)
         for j in range(self.longueur + 1):
-            self.canvas.create_line(j * c_img + padding, padding,  j * c_img + padding, self.hauteur * c_img + padding)
+            self.canvas.create_line(j * c_img + padding, padding, j * c_img + padding, self.hauteur * c_img + padding)
 
-        # draw pieces
+    def affiche_jeu(self, padding, c_img):
+        img_padding = c_img/2 + padding
         for i in range (self.hauteur):
             for j in range (self.longueur):
                 case = str(j) + str(i)
                 if (self.damier[j][i] == 1):
-                    self.canvas.create_image(i * c_img + (c_img/2 + padding), j * c_img + (c_img/2 + padding), image = self.img_pions[0])
+                    self.canvas.create_image(i * c_img + img_padding, j * c_img + img_padding, image = self.img_pions[0])
                 elif (self.damier[j][i] == 2):
-                    self.canvas.create_image(i * c_img + (c_img/2 + padding), j * c_img + (c_img/2 + padding), image = self.img_pions[6])
+                    self.canvas.create_image(i * c_img + img_padding, j * c_img + img_padding, image = self.img_pions[6])
                 elif (estValide(self.damier, self.joueur, case) is True):
-                    self.canvas.create_line(i * c_img + padding, j * c_img + padding, (i+1) * c_img + padding, (j+1) * c_img + padding)
-                    self.canvas.create_line((i+1) * c_img + padding, j * c_img + padding, i * c_img + padding, (j+1) * c_img + padding)
+                    self.affiche_croix(padding, c_img, i, j)
+
+    def affiche_croix(self, padding, c_img, i, j):
+        self.canvas.create_line(i * c_img + padding, j * c_img + padding, (i+1) * c_img + padding, (j+1) * c_img + padding)
+        self.canvas.create_line((i+1) * c_img + padding, j * c_img + padding, i * c_img + padding, (j+1) * c_img + padding)
+
+    def affiche(self):
+        if (self.show_debug is True) : affiche2(self.damier, self.joueur)
+        self.affiche_plateau(self.padding, self.cote_image)
+        self.affiche_jeu(self.padding, self.cote_image)
         
