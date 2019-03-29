@@ -115,7 +115,7 @@ def testdirection(damier, joueur, case, delta_i, delta_j):
     i, j = lignecolonne(case)
     ennemi = 2 if joueur == 1 else 1
     ennemiPresent = False
-
+    
     fin = False
     while (fin is False):
         i, j = i + delta_i, j + delta_j
@@ -124,10 +124,14 @@ def testdirection(damier, joueur, case, delta_i, delta_j):
             break
         if (damier[i][j] == 0):
             fin = True
-        if (damier[i][j] == ennemi):
+        elif (damier[i][j] == ennemi):
             ennemiPresent = True
-        if (damier[i][j] == joueur and ennemiPresent is True):
+        elif (damier[i][j] == joueur and ennemiPresent is True):
             estValide = True
+            fin = True
+        elif (damier[i][j] == joueur and ennemiPresent is False):
+            estValide = False
+            fin = True
 
     return estValide
 

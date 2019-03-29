@@ -9,8 +9,10 @@ class App:
     canvas = None
     frame = None
     img_pions = []
+    file_img_pions = "assets/orthello_animation.gif"
     padding = 20
     cote_image = 32
+    nombre_sprites = 12
 
     show_debug = True
 
@@ -31,23 +33,14 @@ class App:
         self.frame = Frame(self.fenetre, borderwidth = 2, relief = GROOVE)
         Label(self.frame, text = "Frame bison").pack(padx=10, pady=10)
         self.frame.pack(side=RIGHT)
+        
         self.canvas = Canvas(fenetre, width = 360, height = 360, background = '#CD853F')
         self.canvas.bind("<Button-1>", self.clic)
         self.canvas.pack(side=LEFT)
 
         # Charger les images dans une liste 
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 0"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 1"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 2"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 3"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 4"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 5"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 6"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 7"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 8"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 9"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 10"))
-        self.img_pions.append(PhotoImage(file='assets/orthello_animation.gif', format="gif -index 11"))
+        for i in range(self.nombre_sprites):
+            self.img_pions.append(PhotoImage(file=self.file_img_pions, format="gif -index " + str(i)))
 
         self.affiche()
 
