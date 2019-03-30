@@ -3,7 +3,6 @@
 from utils import *
 from ui import App, Tk
 
-# show_ui = False
 show_ui = True
 
 if show_ui is True : 
@@ -16,9 +15,11 @@ if show_ui is True :
 damier = creer_damier()
 joueur = 1
 fin = False
+score_j1 = 0
+score_j2 = 0
 
 while (fin is False):
-    affiche2(damier, joueur)
+    fin = affiche2(damier, joueur)
     
     couleur = "noir" if joueur == 1 else "blanc"
     estValide = False
@@ -29,6 +30,8 @@ while (fin is False):
             fin = True
             break
 
+    score_j1, score_j2 = score(damier)
+    print("scorej1 = " + str(score_j1) + "; scorej2 = " + str(score_j2))
     joueur = 2 if joueur == 1 else 1
     
 

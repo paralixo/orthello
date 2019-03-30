@@ -8,6 +8,8 @@ class App:
     fenetre = None
     canvas = None
     frame = None
+    l_score_j1 = None
+    l_score_j2 = None
     img_pions = []
     file_img_pions = "assets/orthello_animation.gif"
     padding = 20
@@ -21,6 +23,8 @@ class App:
     hauteur = 0
     joueur = 1
     fin = False
+    score_j1 = 0
+    score_j2 = 0
 
     def __init__(self, fenetre):
         # Logique
@@ -31,7 +35,10 @@ class App:
         # UI
         self.fenetre = fenetre
         self.frame = Frame(self.fenetre, borderwidth = 2, relief = GROOVE)
-        Label(self.frame, text = "Frame bison").pack(padx=10, pady=10)
+        self.l_score_j1 = Label(self.frame, text = "Score J1 = 2")
+        self.l_score_j1.pack()
+        self.l_score_j2 = Label(self.frame, text = "Score J2 = 2")
+        self.l_score_j2.pack()
         self.frame.pack(side=RIGHT)
 
         self.canvas = Canvas(fenetre, width = 360, height = 360, background = '#CD853F')
@@ -53,8 +60,13 @@ class App:
             y = truncate((y-20)/32)
             case = str(y) + str(x)
             if (self.show_debug is True) : print("Case = " + case)
-            joue(self.damier, self.joueur, case)
-            self.joueur = 2 if self.joueur == 1 else 1
+
+            estValide = joue(self.damier, self.joueur, case)
+            if (estValide is True) :
+                self.score_j1, self.score_j2 = score(self.damier)
+                self.l_score_j2.text = "Score J2 = " + str(self.score_j1)
+                self.l_score_j2.text = "Score J2 = " + str(self.score_j2)
+                self.joueur = 2 if self.joueur == 1 else 1
 
             self.canvas.delete("all")
             self.affiche()
@@ -67,6 +79,8 @@ class App:
 
     def affiche_jeu(self, padding, c_img):
         img_padding = c_img/2 + padding
+        jeuFini = True
+
         for i in range (self.hauteur):
             for j in range (self.longueur):
                 case = str(j) + str(i)
@@ -75,7 +89,10 @@ class App:
                 elif (self.damier[j][i] == 2):
                     self.canvas.create_image(i * c_img + img_padding, j * c_img + img_padding, image = self.img_pions[6])
                 elif (estValide(self.damier, self.joueur, case) is True):
+                    jeuFini = False
                     self.affiche_croix(padding, c_img, i, j)
+
+        return jeuFini
 
     def affiche_croix(self, padding, c_img, i, j):
         self.canvas.create_line(i * c_img + padding, j * c_img + padding, (i+1) * c_img + padding, (j+1) * c_img + padding)
@@ -84,5 +101,8 @@ class App:
     def affiche(self):
         if (self.show_debug is True) : affiche2(self.damier, self.joueur)
         self.affiche_plateau(self.padding, self.cote_image)
-        self.affiche_jeu(self.padding, self.cote_image)
-        
+        self.fin = self.affiche_jeu(self.padding, self.cote_image)
+
+        if (self.fin):
+            Label(self.frame, text = 'Fin du game')
+ 
