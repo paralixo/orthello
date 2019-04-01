@@ -112,7 +112,7 @@ def lignecolonne(case):
 
 # teste la direction (delta_i, delta_j) ((int, int) -> compris entre -1 et 1 (0,0) non possible)) par rapport à la case choisi et le joueur 
 # retourne True si la case est jouable au sense orthello du terme (partie de estValide())
-def testdirection(damier, joueur, case, delta_i, delta_j):
+def testdirection(damier, joueur, case, delta_i, delta_j, est_dispo = False):
     estValide = False
     longueur = len(damier[0])
     hauteur = len(damier)
@@ -121,6 +121,8 @@ def testdirection(damier, joueur, case, delta_i, delta_j):
     ennemiPresent = False
     
     fin = False
+    if (est_dispo is True and damier[i][j] != 0):
+        fin = True
     while (fin is False):
         i, j = i + delta_i, j + delta_j
         if (j < 0 or j >= longueur or i < 0 or i >= hauteur):
@@ -154,7 +156,7 @@ def estValide(damier, joueur, case):
     for i in range(-1, 2):
         for j in range(-1, 2):
             if (i != 0 or j != 0):
-                estValide = testdirection(damier, joueur, case, i, j)
+                estValide = testdirection(damier, joueur, case, i, j, est_dispo=True)
             if (estValide is True): break
         if (estValide is True): break
     

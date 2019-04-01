@@ -86,9 +86,9 @@ class App:
                 case = str(j) + str(i)
                 if (self.damier[j][i] == 1):
                     self.canvas.create_image(i * c_img + img_padding, j * c_img + img_padding, image = self.img_pions[0])
-                elif (self.damier[j][i] == 2):
+                if (self.damier[j][i] == 2):
                     self.canvas.create_image(i * c_img + img_padding, j * c_img + img_padding, image = self.img_pions[6])
-                elif (estValide(self.damier, self.joueur, case) is True):
+                if (estValide(self.damier, self.joueur, case) is True):
                     jeuFini = False
                     self.affiche_croix(padding, c_img, i, j)
 
