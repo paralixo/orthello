@@ -35,9 +35,9 @@ class App:
         # UI
         self.fenetre = fenetre
         self.frame = Frame(self.fenetre, borderwidth = 2, relief = GROOVE)
-        self.l_score_j1 = Label(self.frame, text = "Score J1 = 2")
+        self.l_score_j1 = Label(self.frame, text = 'Score J1 (noir) = 2')
         self.l_score_j1.pack()
-        self.l_score_j2 = Label(self.frame, text = "Score J2 = 2")
+        self.l_score_j2 = Label(self.frame, text = 'Score J2 (blanc) = 2')
         self.l_score_j2.pack()
         self.frame.pack(side=RIGHT)
 
@@ -64,8 +64,8 @@ class App:
             estValide = joue(self.damier, self.joueur, case)
             if (estValide is True) :
                 self.score_j1, self.score_j2 = score(self.damier)
-                self.l_score_j2.text = "Score J2 = " + str(self.score_j1)
-                self.l_score_j2.text = "Score J2 = " + str(self.score_j2)
+                self.l_score_j1.configure(text = 'Score J1 (noir) = {}'.format(self.score_j1))
+                self.l_score_j2.configure(text = 'Score J2 (blanc) = {}'.format(self.score_j2))
                 self.joueur = 2 if self.joueur == 1 else 1
 
             self.canvas.delete("all")
