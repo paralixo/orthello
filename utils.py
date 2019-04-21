@@ -145,7 +145,7 @@ def testdirection(damier, joueur, case, delta_i, delta_j, est_dispo = False):
 
     return estValide
 
-# retourne True si la case est jouable au sense orthello du terme
+# retourne True si la case est jouable au sense othello du terme
 def estValide(damier, joueur, case):
     if (type(case) != int):
         if (re.match(r"^\d+$", case) is None):
@@ -169,6 +169,7 @@ def estValide(damier, joueur, case):
 def consequences(damier, joueur, case):
     case = int(case)
     directions = []
+    cases_retournes = 0
 
     for i in range(-1, 2):
         for j in range(-1, 2):
@@ -186,6 +187,9 @@ def consequences(damier, joueur, case):
                 fin = True
             if (damier[i][j] == ennemi):
                 damier[i][j] = joueur
+                cases_retournes += 1
+
+    return cases_retournes
 
 # Vérifie qu'on peut jouer dans la case choisie
 # damier -> liste de liste d'entiers

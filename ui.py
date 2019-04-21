@@ -3,6 +3,8 @@
 from tkinter import *
 from utils import *
 from math import trunc as truncate
+import random
+import time
 
 class App:
     fenetre = None
@@ -126,6 +128,7 @@ class App:
         img_padding = c_img/2 + padding
         jeuFini = True
         peutJouer = False
+        cases_jouables = []
 
         for i in range (self.hauteur):
             for j in range (self.longueur):
@@ -135,13 +138,14 @@ class App:
                 elif (self.damier[j][i] == 2):
                     self.canvas.create_image(i * c_img + img_padding, j * c_img + img_padding, image = self.img_pions[6])
                 elif (estValide(self.damier, self.joueur, case) is True):
+                    cases_jouables.append(case)
                     self.affiche_croix(padding, c_img, i, j)
                     jeuFini = False
                     peutJouer = True
                 else:
                     jeuFini = False
 
-        return (jeuFini, peutJouer)
+        return (jeuFini, peutJouer, cases_jouables)
 
     # Affiche une croix (utilisé pour représenter les cases jouables)
     def affiche_croix(self, padding, c_img, i, j):
@@ -153,13 +157,13 @@ class App:
 
         # Affichage "pur" + récupération de variables
         self.affiche_plateau(self.padding, self.cote_image)
-        self.fin, self.peutJouer = self.affiche_jeu(self.padding, self.cote_image)
+        self.fin, self.peutJouer, cases_jouables = self.affiche_jeu(self.padding, self.cote_image)
 
         # Si on ne peut pas jouer on change de joueur
         if (self.peutJouer is False and self.fin is False): 
             self.joueur = 2 if self.joueur == 1 else 1
             self.l_joueur.configure(text = "Joueur " + ("noir" if self.joueur == 1 else "blanc"))
-            self.fin, self.peutJouer = self.affiche_jeu(self.padding, self.cote_image)
+            self.fin, self.peutJouer, cases_jouables = self.affiche_jeu(self.padding, self.cote_image)
 
             # Si le joueur suivant ne peut toujours pas jouer : égalité
             if (self.peutJouer is False): 
@@ -170,7 +174,27 @@ class App:
         if (self.fin is True):
             print("Fin !")
 
+        # Tour de l'ordi
         choix = self.choix_j1 if self.joueur == 1 else self.choix_j2
         if (choix.get() != "humain"):
-            print("L'ordi joue ici")
+            print("L'ordi joue mtn")
+            #possibilites = []
+            #for case in cases_jouables:
+            #    damier_test = list(self.damier)
+            #    scoree = consequences(damier_test, self.joueur, case)
+            #    damier_test = []
+            #    possibilites.append((case, scoree))
+            #print(possibilites)
+
+            joue(self.damier, self.joueur, random.choice(cases_jouables))
+            
+            self.score_j1, self.score_j2 = score(self.damier)
+            self.l_score_j1.configure(text = 'Score J1 (noir) = {}'.format(self.score_j1))
+            self.l_score_j2.configure(text = 'Score J2 (blanc) = {}'.format(self.score_j2))
+            self.joueur = 2 if self.joueur == 1 else 1
+            self.l_joueur.configure(text = "Joueur " + ("noir" if self.joueur == 1 else "blanc"))
+            self.canvas.delete("all")
+            self.affiche()
+            time.sleep(1)
+            
  
