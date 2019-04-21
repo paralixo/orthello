@@ -70,6 +70,7 @@ def affiche2(damier, joueur):
     hauteur = len(damier)
     case = 0
     jeuFini = True
+    peutJouer = False
 
     print()
     for i in range (hauteur):
@@ -86,6 +87,9 @@ def affiche2(damier, joueur):
             elif (estValide(damier, joueur, case) is True):
                 value = '.'
                 jeuFini = False
+                peutJouer = True
+            else:
+                jeuFini = False
             print(value, end = '')
 
             if (j == longueur - 1):
@@ -93,7 +97,7 @@ def affiche2(damier, joueur):
         print()
     affiche_num_colonne(longueur)
 
-    return jeuFini
+    return (jeuFini, peutJouer)
 
 # Retourne la ligne et la colonne pour un numéro de case donnée
 # damier -> liste de liste d'entiers

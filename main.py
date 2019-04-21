@@ -19,19 +19,22 @@ score_j1 = 0
 score_j2 = 0
 
 while (fin is False):
-    fin = affiche2(damier, joueur)
+    fin, peutJouer = affiche2(damier, joueur)
     
     couleur = "noir" if joueur == 1 else "blanc"
-    estValide = False
-    while (estValide is False):
-        case = input("Joueur " + couleur + ", dans quelle case voulez-vous jouer ?")
-        estValide = joue(damier, joueur, case)
-        if (case == "q"):
-            fin = True
-            break
 
-    score_j1, score_j2 = score(damier)
-    print("scorej1 = " + str(score_j1) + "; scorej2 = " + str(score_j2))
+    if (peutJouer is True):
+        estValide = False
+        while (estValide is False):
+            case = input("Joueur " + couleur + ", dans quelle case voulez-vous jouer ?")
+            estValide = joue(damier, joueur, case)
+            if (case == "q"):
+                fin = True
+                break
+
+        score_j1, score_j2 = score(damier)
+        print("scorej1 = " + str(score_j1) + "; scorej2 = " + str(score_j2))
+    
     joueur = 2 if joueur == 1 else 1
     
 
