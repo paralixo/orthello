@@ -18,7 +18,7 @@ class App:
     l_joueur = None
     input = None
     img_pions = []
-    file_img_pions = "assets/orthello_animation.gif"
+    file_img_pions = "assets/othello_animation.gif"
     nb_coups = 0
     padding = 30
     cote_image = 32
@@ -243,7 +243,7 @@ class App:
                 score_possible -= 5
                 possibilites[i] = (case, score_possible)
             # On évite les bords avant le milieu de partie
-            if (self.nb_coups < self.longueur * self.hauteur /2):
+            if (self.nb_coups < self.longueur * self.hauteur /3):
                 if (case[0] == "0" or case[0] == "5" or case[1] == "0" or case[1] == "5"):
                     score_possible -= 1
                     possibilites[i] = (case, score_possible)
