@@ -24,6 +24,17 @@ def creer_damier(hauteur = 6, longueur = 6):
     damier[demi_hauteur-1][demi_longueur]=1
     damier[demi_hauteur][demi_longueur-1]=1
 
+    # Mettre tests ici
+    #damier = [
+    #    [0, 0, 0, 0, 0, 0], # 0
+    #    [2, 0, 0, 0, 0, 0], # 1
+    #    [1, 2, 0, 0, 0, 0], # 2
+    #    [2, 0, 0, 0, 0, 0], # 3
+    #    [0, 0, 0, 0, 0, 0], # 4
+    #    [0, 0, 0, 0, 0, 0]  # 5
+    #    #0, 1, 2, 3, 4, 5
+    #    ]
+        
     return damier
 
 # Affiche le numéro de la ligne courante 
