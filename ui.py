@@ -19,7 +19,8 @@ class App:
     input = None
     img_pions = []
     file_img_pions = "assets/orthello_animation.gif"
-    padding = 20
+    nb_coups = 0
+    padding = 30
     cote_image = 32
     nombre_sprites = 12
 
@@ -78,7 +79,7 @@ class App:
         entree.pack()
         frame.pack(side=RIGHT)
         
-        self.canvas = Canvas(fenetre, width = 232, height = 232, background = '#CD853F')
+        self.canvas = Canvas(fenetre, width = 252, height = 252, background = '#CD853F')
         self.canvas.bind("<Button-1>", self.clic)
         self.canvas.pack(side=LEFT)
 
@@ -132,9 +133,11 @@ class App:
     # Affichage du quadrillage
     def affiche_plateau(self, padding, c_img):
         for i in range(self.hauteur + 1):
+            self.canvas.create_text(padding - 15, i * c_img + padding + 18, fill = "black", font = "Times 15 italic bold", text = (i if i < 6 else ''))
             self.canvas.create_line(padding, i * c_img + padding, self.longueur * c_img + padding, i * c_img + padding)
         for j in range(self.longueur + 1):
             self.canvas.create_line(j * c_img + padding, padding, j * c_img + padding, self.hauteur * c_img + padding)
+            self.canvas.create_text(j * c_img + padding + 12, self.hauteur * c_img + padding + 18, fill = "black", font = "Times 15 italic bold", text = (j if j < 6 else ''))
 
     # Affichage des pions et cases jouables
     def affiche_jeu(self, padding, c_img):
@@ -218,14 +221,37 @@ class App:
             possibilites.append((case, scoree))
 
         # On choisit la case qui retourne le plus de pions en prenant en compte le positionnement de la case (coins, murs, ...)
-        best_score = 0
+        best_score = -999
         case_choisi = None
+        i = 0
         for (case, score_possible) in possibilites:
-            if (case == "0" or case == "50" or case == "5" or case == "55"):
-                score_possible += 10
+            # On priorise les coins
+            if (case == "00" or case == "50" or case == "05" or case == "55"):
+                score_possible += 5
+                possibilites[i] = (case, score_possible)
+            # On évite les coins qu'on ne controle pas (pour ne pas les donner à l'adversaire ou ne aps perdre nos pions)
+            if (self.damier[0][0] != self.joueur and (case == "01" or case == "10" or case == "11")):
+                score_possible -= 5
+                possibilites[i] = (case, score_possible)
+            if (self.damier[0][5] != self.joueur and (case == "04" or case == "14" or case == "15")):
+                score_possible -= 5
+                possibilites[i] = (case, score_possible)
+            if (self.damier[5][0] != self.joueur and (case == "40" or case == "41" or case == "51")):
+                score_possible -= 5
+                possibilites[i] = (case, score_possible)
+            if (self.damier[5][5] != self.joueur and (case == "44" or case == "45" or case == "54")):
+                score_possible -= 5
+                possibilites[i] = (case, score_possible)
+            # On évite les bords avant le milieu de partie
+            if (self.nb_coups < self.longueur * self.hauteur /2):
+                if (case[0] == "0" or case[0] == "5" or case[1] == "0" or case[1] == "5"):
+                    score_possible -= 1
+                    possibilites[i] = (case, score_possible)
+            # On choisit la case par rapport au score
             if (score_possible > best_score):
                 best_score = score_possible
                 case_choisi = case
+            i += 1
 
         case = case_choisi
         if (self.show_debug is True) : print("Possibilités ('case', pions) : ", end = '')
@@ -240,6 +266,7 @@ class App:
         self.update_score()
         self.joueur = 2 if self.joueur == 1 else 1
         self.l_joueur.configure(text = "Tour Joueur " + ("noir" if self.joueur == 1 else "blanc"))
+        self.nb_coups += 1
 
     def update_score(self):
         self.score_j1, self.score_j2 = score(self.damier)
