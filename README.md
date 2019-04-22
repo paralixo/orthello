@@ -26,3 +26,14 @@ project
 
 Executer le fichier main.py avec un compilateur python.
 > A l'aide de votre IDE ou en allant dans votre répertoire avec votre invite de commandes et taper `py ./main.py`
+
+## Des fichiers à ne pas rendre au prof ?
+
+- README.md
+- .gitignore
+- assets/orthello_animation.ase
+- assets/sheet.png
+
+## J'ai des tests à montrer ?
+
+Tout les tests utils se trouvent dans le fichier "test.py". On copie-colle le damier dans la fonction "creer_damier" du fichier "utils.py" à l'endroit indiqué.
