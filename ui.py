@@ -162,8 +162,9 @@ class App:
 
     # Affiche une croix (utilisé pour représenter les cases jouables)
     def affiche_croix(self, padding, c_img, i, j):
-        self.canvas.create_line(i * c_img + padding, j * c_img + padding, (i+1) * c_img + padding, (j+1) * c_img + padding)
-        self.canvas.create_line((i+1) * c_img + padding, j * c_img + padding, i * c_img + padding, (j+1) * c_img + padding)
+        color = "black" if self.joueur == 1 else "white"
+        self.canvas.create_line(i * c_img + padding, j * c_img + padding, (i+1) * c_img + padding, (j+1) * c_img + padding, fill = color)
+        self.canvas.create_line((i+1) * c_img + padding, j * c_img + padding, i * c_img + padding, (j+1) * c_img + padding, fill = color)
 
     # Lance l'affiche et gere la fin de la partie
     def affiche(self):
