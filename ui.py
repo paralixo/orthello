@@ -5,6 +5,7 @@ from utils import *
 from math import trunc as truncate
 import random
 import time
+from threading import Timer
 
 class App:
     fenetre = None
@@ -172,29 +173,38 @@ class App:
 
         # Fin de la partie
         if (self.fin is True):
-            print("Fin !")
+            j1, j2 = score(self.damier)
+            gagnant = "noir" if j1 > j2 else "blanc"
+            score_gagnant = str(j1 if j1 > j2 else j2)
+            score_perdant = str(j2 if j1 > j2 else j1)
+            print("Fin ! Le joueur " + gagnant + " a gagné avec " + score_gagnant + " pions contre " + score_perdant)
 
         # Tour de l'ordi
-        choix = self.choix_j1 if self.joueur == 1 else self.choix_j2
-        if (choix.get() != "humain"):
-            print("L'ordi joue mtn")
-            #possibilites = []
-            #for case in cases_jouables:
-            #    damier_test = list(self.damier)
-            #    scoree = consequences(damier_test, self.joueur, case)
-            #    damier_test = []
-            #    possibilites.append((case, scoree))
-            #print(possibilites)
+        if (self.fin is False):
+            choix = self.choix_j1 if self.joueur == 1 else self.choix_j2
+            if (choix.get() != "humain"):
+                print("Tour ordi (J" + str(self.joueur) + ")")
+                self.canvas.update()
+                self.canvas.after(1000, self.ia(cases_jouables))
 
-            joue(self.damier, self.joueur, random.choice(cases_jouables))
+    def ia(self, cases_jouables):
+        joue(self.damier, self.joueur, random.choice(cases_jouables))
             
-            self.score_j1, self.score_j2 = score(self.damier)
-            self.l_score_j1.configure(text = 'Score J1 (noir) = {}'.format(self.score_j1))
-            self.l_score_j2.configure(text = 'Score J2 (blanc) = {}'.format(self.score_j2))
-            self.joueur = 2 if self.joueur == 1 else 1
-            self.l_joueur.configure(text = "Joueur " + ("noir" if self.joueur == 1 else "blanc"))
-            self.canvas.delete("all")
-            self.affiche()
-            time.sleep(1)
+        self.score_j1, self.score_j2 = score(self.damier)
+        self.l_score_j1.configure(text = 'Score J1 (noir) = {}'.format(self.score_j1))
+        self.l_score_j2.configure(text = 'Score J2 (blanc) = {}'.format(self.score_j2))
+        self.joueur = 2 if self.joueur == 1 else 1
+        self.l_joueur.configure(text = "Joueur " + ("noir" if self.joueur == 1 else "blanc"))
+
+        self.canvas.delete("all")
+        self.affiche()
+
+        #possibilites = []
+        #for case in cases_jouables:
+        #    damier_test = list(self.damier)
+        #    scoree = consequences(damier_test, self.joueur, case)
+        #    damier_test = []
+        #    possibilites.append((case, scoree))
+        #print(possibilites)
             
  
