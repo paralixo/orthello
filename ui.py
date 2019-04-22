@@ -4,6 +4,7 @@ from tkinter import *
 from utils import *
 from math import trunc as truncate
 import copy
+import time
 
 class App:
     # UI
@@ -11,6 +12,7 @@ class App:
     canvas = None
     choix_j1 = None
     choix_j2 = None
+    first_player = None
     l_score_j1 = None
     l_score_j2 = None
     l_joueur = None
@@ -49,10 +51,17 @@ class App:
         self.choix_j1.set("humain")
         self.choix_j2 = StringVar(parametres)
         self.choix_j2.set("humain")
-        OptionMenu(parametres, self.choix_j1, "humain", "ordi").grid(row=1, column=1)
-        Label(parametres, text = "VS").grid(row=1, column=2)
-        OptionMenu(parametres, self.choix_j2, "humain", "ordi").grid(row=1, column=3)
-        Button(parametres, text="Relancer partie", command=self.commencer).grid(row=2, column=2)
+        self.first_player = StringVar(parametres)
+        self.first_player.set("noir")
+
+        Label(parametres, text = "noir").grid(row=1, column=1)
+        Label(parametres, text = "blanc").grid(row=1, column=3)
+        OptionMenu(parametres, self.choix_j1, "humain", "ordi").grid(row=2, column=1)
+        Label(parametres, text = "VS").grid(row=2, column=2)
+        OptionMenu(parametres, self.choix_j2, "humain", "ordi").grid(row=2, column=3)
+        Label(parametres, text = "Commencer par : ").grid(row=3, column=1)
+        OptionMenu(parametres, self.first_player, "noir", "blanc").grid(row=3, column=2)
+        Button(parametres, text="Relancer partie", command=self.commencer).grid(row=4, column=2)
         parametres.pack()
         
         score = LabelFrame(frame, text = "Scores : ")
@@ -62,10 +71,11 @@ class App:
         self.l_score_j2.pack()
         score.pack()
 
-        Label(frame, text = "Entrée manuelle : ").pack()
-        self.input = Entry(frame, bd = 5)
+        entree = LabelFrame(frame, text = "Entrée manuelle : ")
+        self.input = Entry(entree, bd = 5)
         self.input.pack(side=LEFT)
-        Button(frame, text="Valider", command=lambda:self.clic(type(Event), True)).pack(side=RIGHT)
+        Button(entree, text="Valider", command=lambda:self.clic(type(Event), True)).pack(side=RIGHT)
+        entree.pack()
         frame.pack(side=RIGHT)
         
         self.canvas = Canvas(fenetre, width = 232, height = 232, background = '#CD853F')
@@ -84,7 +94,7 @@ class App:
         self.longueur = len(self.damier[0])
         self.hauteur = len(self.damier)
         self.update_score()
-        self.joueur = 1
+        self.joueur = 1 if self.first_player.get() == "noir" else 2
         self.l_joueur.configure(text = "Tour Joueur " + ("noir" if self.joueur == 1 else "blanc"))
         self.affiche()
 
@@ -182,9 +192,13 @@ class App:
                 gagnant = "noir" if j1 > j2 else "blanc"
                 score_gagnant = str(j1 if j1 > j2 else j2)
                 score_perdant = str(j2 if j1 > j2 else j1)
-                print("Fin ! Le joueur " + gagnant + " a gagné avec " + score_gagnant + " pions contre " + score_perdant)
+                message = "Fin ! Le joueur " + gagnant + " a gagné avec " + score_gagnant + " pions contre " + score_perdant
+                if (self.show_debug is True) : print(message)
+                self.popup(message)
             else:
-                print("Egalité à " + str(j1) + " !")
+                message = "Egalité à " + str(j1) + " !"
+                if (self.show_debug is True) : print(message)
+                self.popup(message)
 
         # Tour de l'ordi
         if (self.fin is False):
@@ -192,7 +206,8 @@ class App:
             if (choix.get() != "humain"):
                 if (self.show_debug is True) : print("Tour ordi (J" + str(self.joueur) + ")")
                 self.canvas.update()
-                self.canvas.after(2500, self.bot(cases_jouables))
+                time.sleep(1)
+                self.bot(cases_jouables)
 
     def bot(self, cases_jouables):
         # On récupère le nombre de pions retournés pour chacunes des cases jouables
@@ -205,7 +220,7 @@ class App:
         best_score = 0
         case_choisi = None
         for (case, score_possible) in possibilites:
-            if (case == 0 or case == 50 or case == 5 or case == 55):
+            if (case == "0" or case == "50" or case == "5" or case == "55"):
                 score_possible += 10
             if (score_possible > best_score):
                 best_score = score_possible
@@ -218,6 +233,7 @@ class App:
         joue(self.damier, self.joueur, case)
         self.apres_coup()
         self.affiche()
+        self.canvas.update()
 
     def apres_coup(self):
         self.update_score()
@@ -228,5 +244,10 @@ class App:
         self.score_j1, self.score_j2 = score(self.damier)
         self.l_score_j1.configure(text = 'Score J1 (noir) = {}'.format(self.score_j1))
         self.l_score_j2.configure(text = 'Score J2 (blanc) = {}'.format(self.score_j2))
-        
+    
+    def popup(self, infos):
+        fInfos = Toplevel()
+        fInfos.title('Infos')
+        Label(fInfos, text = infos).pack()
+        Button(fInfos, text='Quitter', command=fInfos.destroy).pack(padx=10, pady=10)
  
